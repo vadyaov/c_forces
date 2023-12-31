@@ -1,7 +1,8 @@
 #include "ssearch.h"
+#include <iostream>
 
 std::vector<StringSearch::ipair>
-StringSearch::SimpleSubStr(const std::string& s, const std::string& p) const noexcept {
+StringSearch::SimpleSubStr(const std::string& s, const std::string& p) {
   if (s.empty() || p.empty() || p.size() > s.size())
     return std::vector<StringSearch::ipair>();
 
@@ -26,7 +27,7 @@ StringSearch::SimpleSubStr(const std::string& s, const std::string& p) const noe
   return substr_pos;
 }
 
-std::vector<int> StringSearch::ZFunc2(const std::string& str) const noexcept {
+std::vector<int> StringSearch::ZFunc2(const std::string& str) {
   std::vector<int> z(str.size(), 0);
 
   // z[0] = 0 по определению
@@ -37,7 +38,7 @@ std::vector<int> StringSearch::ZFunc2(const std::string& str) const noexcept {
   return z;
 }
 
-std::vector<int> StringSearch::ZFunc1(const std::string& str) const noexcept {
+std::vector<int> StringSearch::ZFunc1(const std::string& str) {
   const int n = str.size();
 
   std::vector<int> z(n, 0);
@@ -75,7 +76,7 @@ std::vector<int> StringSearch::ZFunc1(const std::string& str) const noexcept {
 }
 
 std::vector<StringSearch::ipair>
-StringSearch::ZSubStr(const std::string& s, const std::string& p) const noexcept {
+StringSearch::ZSubStr(const std::string& s, const std::string& p) {
   if (s.empty() || p.empty() || p.size() > s.size())
     return std::vector<StringSearch::ipair>();
 
@@ -89,4 +90,39 @@ StringSearch::ZSubStr(const std::string& s, const std::string& p) const noexcept
     }
 
   return substr_pos;
+}
+
+/* std::string MakeCyclicShifts(const std::string& str) { */
+/*   std::string s; */
+
+/*   for (int i = 0; i < str.size(); ++i) { */
+/*     for (int j = i; j < str.size(); ++j) */
+/*       s += str[j]; */
+/*     for (int k = 0; k < i; ++k) */
+/*       s += str[k]; */
+/*   } */
+
+/*   return s; */
+/* } */
+
+bool StringSearch::IsCyclicShift(const std::string& s, const std::string& t) {
+  std::string base = t + '$' + s + s;
+  std::vector<int> z = ZFunc1(base);
+
+  for (int n : z)
+    if (n == t.size())
+      return true;
+
+  return false;
+}
+
+std::string StringSearch::LongestEdge(const std::string& s) {
+  std::vector<int> z = ZFunc1(s);
+  for (int j = 1; j < s.size(); ++j) {
+    if (z[j] == s.size() - j) {
+      return std::string(s.begin(), s.begin()  + s.size() - j);
+    }
+  }
+
+  return "";
 }

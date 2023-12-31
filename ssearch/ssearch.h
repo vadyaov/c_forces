@@ -10,14 +10,17 @@ class StringSearch {
     /* наивный алгоритм, время работы O(nm) */
     /* n = s.size(), m = p.size() */
     /* std::string.find() работает примерно за такое же время */
-    std::vector<ipair> SimpleSubStr(const std::string& s, const std::string& p) const noexcept;
+    static std::vector<ipair> SimpleSubStr(const std::string& s, const std::string& p);
 
-    std::vector<ipair> ZSubStr(const std::string& s, const std::string& p) const noexcept;
+    static std::vector<ipair> ZSubStr(const std::string& s, const std::string& p);
 
     // find Z-function of string for O(n^2)
-    std::vector<int> ZFunc2(const std::string& str) const noexcept;
+    static std::vector<int> ZFunc2(const std::string& str);
 
     // find Z-function of string for O(n)
-    std::vector<int> ZFunc1(const std::string& str) const noexcept;
+    static std::vector<int> ZFunc1(const std::string& str);
 
+    static bool IsCyclicShift(const std::string& s, const std::string& t);
+
+    static std::string LongestEdge(const std::string& s);
 };
