@@ -2,6 +2,8 @@
 #include <vector>
 #include <iostream>
 
+const std::string alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 int main() {
 
   int t;
@@ -19,6 +21,7 @@ int main() {
 
   for (int k = 0; k != t; ++k) {
 
+    /*
     int alphabet = 'a';
     std::string s(sz[k], alphabet);
 
@@ -35,6 +38,32 @@ int main() {
           s[i + j] = s[j];
         }
         i += z[k][i];
+      }
+    }
+    */
+
+    std::string s;
+    int prefixLength = 0;
+    int j;
+    int newCharacter = 0;
+
+    for (int i = 0; i != sz[k]; ++i) {
+      if (z[k][i] == 0 && prefixLength == 0) {
+        if (newCharacter < alphabet.size()) {
+            s += alphabet[newCharacter++];
+        } else {
+          s += alphabet[newCharacter - 1];
+        }
+      }
+
+      if (z[k][i] > prefixLength) {
+        prefixLength = z[k][i];
+        j = 0;
+      }
+
+      if (prefixLength > 0) {
+        s += s[j++];
+        prefixLength--;
       }
     }
 
