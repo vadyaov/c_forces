@@ -7,7 +7,7 @@ int ZFunc(const std::string& s, int t_sz) {
   std::vector<int> z (sz, 0);
   int result = -1;
 
-  for (int i = 0, l = 0, r = 0; i != sz; ++i) {
+  for (int i = 1, l = 0, r = 0; i != sz; ++i) {
     if (r >= i)
       z[i] = std::min(z[i - l], r - i + 1);
 
