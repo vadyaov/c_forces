@@ -3,9 +3,6 @@
 #include <vector>
 #include <algorithm>
 
-/* #include <sstream> */
-/* #include <iterator> */
-
 std::vector<int> ZFunc(const std::string& s) {
   const int sz = s.size();
   std::vector<int> z(sz, 0);
@@ -26,7 +23,35 @@ std::vector<int> ZFunc(const std::string& s) {
   return z;
 }
 
+std::vector<int> countGreaterOrEqual(const std::vector<int>& arr) {
+    int n = arr.size();
+
+    int max_val = *std::max_element(arr.begin(), arr.end());
+
+    std::vector<int> count(max_val + 1, 0);
+
+    for (int i = 0; i < n; ++i) {
+        count[arr[i]]++;
+    }
+
+    for (int i = max_val - 1; i >= 0; --i) {
+        count[i] += count[i + 1];
+    }
+
+    std::vector<int> res(n, 0);
+    for (int i = 0; i < n; ++i) {
+        if (arr[i] > 0) {
+            res[i] = count[arr[i] - 1];
+        }
+    }
+
+    return res;
+}
+
 int main() {
+  std::ios_base::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+
   int n;
   std::cin >> n;
 
@@ -36,24 +61,19 @@ int main() {
     std::string s;
     std::cin >> s;
 
-    res[k].reserve(s.size());
+    res[k].resize(s.size(), 1);
     std::vector<int> z = ZFunc(s);
-    
-    for (int i = 1; i != s.size(); ++i) {
-      res[k].push_back(1 + std::count_if(z.begin() + 1, z.end() - i + 1, [i](int a) {
-            return a >= i;}
-            ));
+
+    for (int i = 1; i != z.size(); ++i) {
+      while(z[i]--)
+        res[k][z[i]]++;
     }
-    res[k].push_back(1);
   }
 
   for (const auto& ivec : res) {
     for (int i : ivec)
       std::cout << i << " ";
     std::cout << std::endl;
-    /* std::stringstream result; */
-    /* std::copy(ivec.begin(), ivec.end(), std::ostream_iterator<int>(result, " ")); */
-    /* std::cout << result.str() << std::endl; */
   }
 
   return 0;
