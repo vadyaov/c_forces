@@ -23,57 +23,33 @@ std::vector<int> ZFunc(const std::string& s) {
   return z;
 }
 
-std::vector<int> countGreaterOrEqual(const std::vector<int>& arr) {
-    int n = arr.size();
-
-    int max_val = *std::max_element(arr.begin(), arr.end());
-
-    std::vector<int> count(max_val + 1, 0);
-
-    for (int i = 0; i < n; ++i) {
-        count[arr[i]]++;
-    }
-
-    for (int i = max_val - 1; i >= 0; --i) {
-        count[i] += count[i + 1];
-    }
-
-    std::vector<int> res(n, 0);
-    for (int i = 0; i < n; ++i) {
-        if (arr[i] > 0) {
-            res[i] = count[arr[i] - 1];
-        }
-    }
-
-    return res;
-}
-
 int main() {
   std::ios_base::sync_with_stdio(false);
   std::cin.tie(nullptr);
 
-  int n;
+  int32_t n;
   std::cin >> n;
 
-  std::vector<std::vector<int>> res(n);
-
+  std::string s;
   for (int k = 0; k != n; ++k) {
-    std::string s;
     std::cin >> s;
 
-    res[k].resize(s.size(), 1);
     std::vector<int> z = ZFunc(s);
+    std::vector<int> freqs(s.size(), 0);
 
-    for (int i = 1; i != z.size(); ++i) {
-      while(z[i]--)
-        res[k][z[i]]++;
+    for (int len : z) {
+      if (len > 0) {
+        ++freqs[len - 1];
+      }
     }
-  }
+    freqs.back() = 1;
 
-  for (const auto& ivec : res) {
-    for (int i : ivec)
-      std::cout << i << " ";
-    std::cout << std::endl;
+    for (int i = freqs.size() - 1; i >= 1; --i)
+      freqs[i - 1] += freqs[i];
+
+    for (int f : freqs)
+      std::cout << f << " ";
+    std::cout << "\n";
   }
 
   return 0;
