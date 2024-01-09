@@ -27,36 +27,39 @@ std::vector<int> zfunc(const std::string& s) {
 int main() {
   std::string s, t; std::cin >> s >> t;
 
+  if (s.size() != t.size()) {
+    std::cout << "No";
+    return 0;
+  }
+
+  if (s == t) {
+    std::cout << "Yes\n" << 0;
+    return 0;
+  }
+
+  std::string ot {t};
   std::reverse(t.begin(), t.end());
+
   std::string st = s + '#' + t;
 
-  /* std::cout << "st = " << st << "\n"; */
   auto z = zfunc(st);
 
-  int pos = s.size() + 1;
-  for (int i = s.size() + 1; i < st.size(); ++i) {
-    if (i + z[i] == st.size()) {
-      pos = i;
-      break;
+  int value = z[s.size() + 1];
+
+
+  for (int k = 1; k <= value; ++k) {
+    bool yes = true;
+    for (int a = k, j = 0; yes && a != s.size(); ++a, ++j) {
+      if (s[a] != ot[j]) yes = false;
+    }
+    if (yes == true) {
+      std::cout << "Yes\n" << k;
+      return 0;
     }
   }
 
-  if (pos + z[pos] == st.size() && pos != s.size() + 1) {
-    std::reverse(st.begin() + pos, st.begin() + pos + z[pos]);
-    pos = pos - s.size() - 1;
-  } else {
-    std::reverse(st.begin() + pos + z[pos], st.end());
-    pos = pos + z[pos] == st.size() ? 1 : z[pos];
-  }
+  std::cout << "No";
 
-  /* std::cout << "st = " << st << "\n"; */
-
-  z = zfunc(st);
-  if (z[s.size() + 1] == t.size()) {
-    std::cout << "Yes\n" << pos;
-  } else {
-    std::cout << "No";
-  }
 
   return 0;
 }
