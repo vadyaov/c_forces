@@ -1,10 +1,35 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+
+std::vector<int> zfunc(const std::string& s) {
+  const int sz = s.size();
+  std::vector<int> z(sz, 0);
+
+  for (int i = 1, l = 0, r = 0; i != sz; ++i) {
+    if (r >= i)
+      z[i] = std::min(z[i - l], r - i + 1);
+    
+    while (i + z[i] < sz && s[i + z[i]] == s[z[i]])
+      z[i]++;
+
+    if (r < i + z[i] - 1) {
+      l = i;
+      r = i + z[i] - 1;
+    }
+
+  }
+
+  return z;
+}
 
 std::string s, t;
 
 int main() {
+  std::ios_base::sync_with_stdio(false);
+  std::cin.tie(nullptr);
+
   int q; std::cin >> q;
   std::string st, ts;
 
@@ -13,52 +38,49 @@ int main() {
     st = s + '#' + t;
     ts = t + '#' + s;
 
-    std::vector<int> zst(st.size(), 0);
-    std::vector<int> zts(st.size(), 0);
+    auto zst = zfunc(st);
+    auto zts = zfunc(ts);
+
+/*     std::cout << st << "\n"; */
+/*     for (int zi : zst) std::cout << zi; */
+/*     std::cout << "\n"; */
+/*     std::cout << ts << "\n"; */
+/*     for (int zi : zts) std::cout << zi; */
+/*     std::cout << "\n"; */
 
     int zmax = 0, imax = 0;
-    for (int i = 1, l1 = 0, r1 = 0, l2 = 0, r2 = 0; i != st.size(); ++i) {
-      if (r1 >= i)
-        zst[i] = std::min(zst[l1 - i], r1 - i + 1);
-
-      if (r2 >= i)
-        zts[i] = std::min(zts[l2 - i], r2 - i + 1);
-
-      while (i + zst[i] < st.size() && st[i + zst[i]] == st[zst[i]])
-        zst[i]++;
-
-      while (i + zts[i] < st.size() && ts[i + zts[i]] == ts[zts[i]])
-        zts[i]++;
-
-      if (zst[i] > zmax && (i == s.size() + 1 || i + zst[i] == st.size() || zst[i] == s.size())) {
-        zmax = zst[i];
-        imax = i;
-      }
-
-      if (zts[i] > zmax && (i == t.size() + 1 || i + zts[i] == ts.size() || zts[i] == t.size())) {
-        zmax = zts[i];
-        imax = i;
-      }
-
-      if (r1 < i + zst[i] - 1) {
-        l1 = i;
-        r1 = i + zst[i] - 1;
-      }
-
-      if (r2 < i + zts[i] - 1) {
-        l2 = i;
-        r2 = i + zts[i] - 1;
-      }
+    for (int i1 = s.size() + 1, i2 = t.size() + 1; i1 < zst.size() && i2 < zts.size(); ++i1, ++i2) {
+      if (zst[i1] > zmax)
+        zmax = zst[i1], imax = i1;
+      if (zts[i2] > zmax)
+        zmax = zts[i2], imax = i2;
     }
 
-    /* std::cout << "zmax " << zmax << " at pos " << imax << "\n"; */
+    std::cout << "zmax = " << zmax << " at pos " << imax << "\n";
 
-    if (zst[imax] == zmax) {
-      std::cout << t + std::string(s.begin() + zmax, s.end());
+    if (zmax == zst[imax]) {
+      // working with st string and zst func
+      std::reverse(st.end() - zmax, st.end());
+
+      int k = 0, last = st.size() - 1, first = 0;
+      while (zmax < s.size() && first < zmax && st[last--] == st[first++]) {
+        k++;
+      }
+
+      std::cout << t + std::string(s.begin() + k, s.end());
+
     } else {
-      std::cout << s + std::string(t.begin() + zmax, t.end());
+      // working with ts string and zts func
+      std::reverse(ts.end() - zmax, ts.end());
+
+      int k = 0, last = ts.size() - 1, first = 0;
+      while (zmax < t.size() && first < zmax && ts[last--] == ts[first++]) {
+        k++;
+      }
+
+      std::cout << s + std::string(t.begin() + k, t.end());
+
     }
-    std::cout << "\n";
 
   }
 
