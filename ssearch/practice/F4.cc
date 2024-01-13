@@ -41,42 +41,64 @@ int main() {
     auto zst = zfunc(st);
     auto zts = zfunc(ts);
 
-/*     std::cout << st << "\n"; */
-/*     for (int zi : zst) std::cout << zi; */
-/*     std::cout << "\n"; */
-/*     std::cout << ts << "\n"; */
-/*     for (int zi : zts) std::cout << zi; */
-/*     std::cout << "\n"; */
+    std::cout << st << "\n";
+    for (int zi : zst) std::cout << zi;
+    std::cout << "\n";
+    std::cout << ts << "\n";
+    for (int zi : zts) std::cout << zi;
+    std::cout << "\n";
 
     int zmax = 0, imax = 0;
-    for (int i1 = s.size() + 1, i2 = t.size() + 1; i1 < zst.size() && i2 < zts.size(); ++i1, ++i2) {
-      if (zst[i1] > zmax)
-        zmax = zst[i1], imax = i1;
-      if (zts[i2] > zmax)
-        zmax = zts[i2], imax = i2;
+    for (int i = st.size() - 1; i > std::min(s.size(), t.size()); --i) {
+      if (zst[i] > zmax && i > s.size())
+        zmax = zst[i], imax = i;
+      if (zts[i] > zmax && i > t.size())
+        zmax = zts[i], imax = i;
     }
 
-    std::cout << "zmax = " << zmax << " at pos " << imax << "\n";
+    /* std::cout << "zmax = " << zmax << " at pos " << imax << "\n"; */
 
     if (zmax == zst[imax]) {
       // working with st string and zst func
-      std::reverse(st.end() - zmax, st.end());
 
-      int k = 0, last = st.size() - 1, first = 0;
-      while (zmax < s.size() && first < zmax && st[last--] == st[first++]) {
-        k++;
+      int k = 0;
+      for (int i = st.size() - zmax; i < st.size(); ++i) {
+        bool catched = true;
+        for (int j = 0; j < st.size() - i; ++j) {
+          if (st[j] != st[i + j]) {
+            catched = false;
+            break;
+          }
+        }
+        if (catched) {
+          k = st.size() - i;
+          break;
+        }
       }
+
+      if (zmax == s.size()) k = zmax;
 
       std::cout << t + std::string(s.begin() + k, s.end());
 
     } else {
       // working with ts string and zts func
-      std::reverse(ts.end() - zmax, ts.end());
 
-      int k = 0, last = ts.size() - 1, first = 0;
-      while (zmax < t.size() && first < zmax && ts[last--] == ts[first++]) {
-        k++;
+      int k = 0;
+      for (int i = ts.size() - zmax; i < ts.size(); ++i) {
+        bool catched = true;
+        for (int j = 0; j < ts.size() - i; ++j) {
+          if (ts[j] != ts[i + j]) {
+            catched = false;
+            break;
+          }
+        }
+        if (catched) {
+          k = ts.size() - i;
+          break;
+        }
       }
+
+      if (zmax == t.size()) k = zmax;
 
       std::cout << s + std::string(t.begin() + k, t.end());
 
