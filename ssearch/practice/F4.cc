@@ -41,68 +41,40 @@ int main() {
     auto zst = zfunc(st);
     auto zts = zfunc(ts);
 
-    std::cout << st << "\n";
-    for (int zi : zst) std::cout << zi;
-    std::cout << "\n";
-    std::cout << ts << "\n";
-    for (int zi : zts) std::cout << zi;
-    std::cout << "\n";
+    std::string st_answer, ts_answer;
 
-    int zmax = 0, imax = 0;
-    for (int i = st.size() - 1; i > std::min(s.size(), t.size()); --i) {
-      if (zst[i] > zmax && i > s.size())
-        zmax = zst[i], imax = i;
-      if (zts[i] > zmax && i > t.size())
-        zmax = zts[i], imax = i;
+    for (int i = s.size() + 1; i < st.size(); ++i) {
+      if (zst[i] == s.size()) {
+        st_answer = t;
+        break;
+      }
     }
 
-    /* std::cout << "zmax = " << zmax << " at pos " << imax << "\n"; */
-
-    if (zmax == zst[imax]) {
-      // working with st string and zst func
-
-      int k = 0;
-      for (int i = st.size() - zmax; i < st.size(); ++i) {
-        bool catched = true;
-        for (int j = 0; j < st.size() - i; ++j) {
-          if (st[j] != st[i + j]) {
-            catched = false;
-            break;
-          }
-        }
-        if (catched) {
-          k = st.size() - i;
-          break;
-        }
-      }
-
-      if (zmax == s.size()) k = zmax;
-
-      std::cout << t + std::string(s.begin() + k, s.end());
-
-    } else {
-      // working with ts string and zts func
-
-      int k = 0;
-      for (int i = ts.size() - zmax; i < ts.size(); ++i) {
-        bool catched = true;
-        for (int j = 0; j < ts.size() - i; ++j) {
-          if (ts[j] != ts[i + j]) {
-            catched = false;
-            break;
-          }
-        }
-        if (catched) {
-          k = ts.size() - i;
-          break;
-        }
-      }
-
-      if (zmax == t.size()) k = zmax;
-
-      std::cout << s + std::string(t.begin() + k, t.end());
-
+    for (int i = t.size() + 1; st_answer.empty() && i < ts.size(); ++i) {
+      if (i + zts[i] == zts.size())
+        st_answer = s + std::string(t.begin() + zts[i], t.end());
     }
+
+    for (int i = t.size() + 1; i < ts.size(); ++i) {
+      if (zts[i] == t.size()) {
+        ts_answer = s;
+        break;
+      }
+    }
+
+    for (int i = s.size() + 1; ts_answer.empty() && i < st.size(); ++i) {
+      if (i + zst[i] == zst.size()) {
+        ts_answer = t + std::string(s.begin() + zst[i], s.end());
+      }
+    }
+
+    if (ts_answer.empty()) ts_answer = t + s;
+    if (st_answer.empty()) st_answer = s + t;
+
+    if (st_answer.size() < ts_answer.size())
+      std::cout << st_answer << "\n";
+    else
+      std::cout << ts_answer << "\n";
 
   }
 
