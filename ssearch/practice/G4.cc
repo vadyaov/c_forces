@@ -1,7 +1,7 @@
 #include <vector>
 #include <iostream>
 
-std::vector<int> zfunc(const std::vector<int>& s) {
+std::vector<int> zfunc(const std::vector<int>& s, int stop) {
   /* std::cout << " s = " << s << "\n"; */
   const int n = s.size();
   std::vector<int> z(n, 0);
@@ -17,6 +17,7 @@ std::vector<int> zfunc(const std::vector<int>& s) {
       l = i;
       r = i + z[i] - 1;
     }
+    if (i == stop) break;
   }
 
   return z;
@@ -42,13 +43,13 @@ int main() {
       zstr[last] = zstr[last + add];
     }
 
-    /* for (int zs : zstr) */
-    /*   std::cout << zs << " "; */
-    /* std::cout << "\n"; */
+/*     for (int zs : zstr) */
+/*       std::cout << zs << " "; */
+/*     std::cout << "\n"; */
 
-    auto z = zfunc(zstr);
+    auto z = zfunc(zstr, n + 1);
 
-    if (z[z.size() - n] == n)
+    if (z[n + 1] == n)
       std::cout << k << " ";
     
   }
