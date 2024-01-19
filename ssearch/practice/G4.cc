@@ -28,16 +28,28 @@ int main() {
   for (int i = 0; i != n; ++i)
     std::cin >> colors[i];
 
-  for (int k = n / 2; k > 0; --k) {
-    std::vector<int> zstr{colors};
-    zstr.insert(zstr.end(), m + 1);
-    zstr.insert(zstr.end(), colors.rbegin(), colors.rend() - k);
-    zstr.insert(zstr.end(), colors.begin() + k, colors.end());
+  std::vector<int> zstr{colors};
+  zstr.push_back(m + 1);
+  zstr.resize(zstr.size() + n);
+  for (int k = n / 2; k < n; ++k) {
+    int i = 0;
+    int last = zstr.size() - i - 1;
+    for (; i < k; ++i, --last) {
+      zstr[last] = zstr[n - i - 1];
+    }
+
+    for (int add = 1; last > n; --last, add += 2){
+      zstr[last] = zstr[last + add];
+    }
+
+    /* for (int zs : zstr) */
+    /*   std::cout << zs << " "; */
+    /* std::cout << "\n"; */
 
     auto z = zfunc(zstr);
 
     if (z[z.size() - n] == n)
-      std::cout << n - k << " ";
+      std::cout << k << " ";
     
   }
 
