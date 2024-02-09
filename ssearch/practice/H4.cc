@@ -1,5 +1,3 @@
-/* Найти сумму длин всеx подстрок строки */
-
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -15,8 +13,10 @@ std::vector<int> zfunc(const std::string& s) {
     while (i + z[i] < n && s[i + z[i]] == s[z[i]])
       z[i]++;
 
-    if (r < i + z[i] - 1)
-      l = i, r = i + z[i] - 1;
+    if (r < i + z[i] - 1) {
+      l = i;
+      r = i + z[i] - 1;
+    }
   }
 
   return z;
@@ -28,16 +28,18 @@ int main() {
   std::cin >> s;
 
   int answ = 0;
-
   std::string suff;
-  for (int i = 0, n = s.size(); i < n; ++i) {
-    suff.assign(s, s.length() - i - 1, i + 1);
+
+  for (int n = s.size(), i = n - 1; i >= 0; --i) {
+    suff = s[i] + suff;
 
     auto z = zfunc(suff);
     int pref_sz = *std::max_element(z.begin(), z.end());
 
-    while (pref_sz++ < suff.size())
+    while (pref_sz < suff.size()) {
+      ++pref_sz;
       answ += pref_sz;
+    }
   }
 
   std::cout << answ;

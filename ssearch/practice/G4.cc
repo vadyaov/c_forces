@@ -32,11 +32,6 @@ int main() {
 
   auto z = zFunc(colors);
 
-  /* std::cout << "z: "; */
-  /* for (int zf : z) */
-  /*   std::cout << zf << " "; */
-  /* std::cout << "\n"; */
-
   for (int k = n % 2 == 0 ? n / 2 : n / 2 + 1; k < n; ++k)
     if (z[2 * k] >= n - k) std::cout << k << " ";
 
