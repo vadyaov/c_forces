@@ -1,23 +1,22 @@
 #include <vector>
 #include <iostream>
 
-int zfunc(const std::vector<int>& s, int n) {
-  /* const int n = s.size(); */
-  int z = 0;
+std::vector<int> zFunc(const std::vector<int>& s) {
+  const int n = s.size();
+  std::vector<int> z(n, 0);
 
-  /* for (int i = stop, l = 0, r = 0; i != n; ++i) { */
-  /*   if (r >= i) */
-  /*     z[i] = std::min(z[i - l], r - i + 1); */
+  for (int i = 1, l = 0, r = 0; i != n; ++i) {
+    if (r >= i)
+      z[i] = std::min(z[i - l], r - i + 1);
 
-    while (s[n + z] == s[z])
-      z++;
+    while (i + z[i] < n && s[i + z[i]] == s[z[i]])
+      z[i]++;
 
-    /* if (r < i + z[i] - 1) { */
-    /*   l = i; */
-    /*   r = i + z[i] - 1; */
-    /* } */
-    /* if (i == stop) break; */
-  /* } */
+    if (r < i + z[i] - 1) {
+      l = i;
+      r = i + z[i] - 1;
+    }
+  }
 
   return z;
 }
@@ -28,20 +27,18 @@ int main() {
   for (int i = 0; i != n; ++i)
     std::cin >> colors[i];
 
-  std::vector<int> zstr{colors};
-  zstr.push_back(m + 1);
-  zstr.resize(zstr.size() + n / 2 + 1);
-  for (int k = n % 2 == 0 ? n / 2 : n / 2 + 1; k < n; ++k) {
+  for (int i = 0; i < n; ++i)
+    colors.push_back(colors[n - i - 1]);
 
-    for (int i = 0; i < n - k; ++i)
-      zstr[n + n - k - i] = zstr[n - k + i];
+  auto z = zFunc(colors);
 
-    int z = zfunc(zstr, n + 1);
+  /* std::cout << "z: "; */
+  /* for (int zf : z) */
+  /*   std::cout << zf << " "; */
+  /* std::cout << "\n"; */
 
-    if (z >= n - k)
-      std::cout << k << " ";
-    
-  }
+  for (int k = n % 2 == 0 ? n / 2 : n / 2 + 1; k < n; ++k)
+    if (z[2 * k] >= n - k) std::cout << k << " ";
 
   std::cout << n;
 
