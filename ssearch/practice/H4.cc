@@ -27,14 +27,14 @@ int main() {
   std::string s;
   std::cin >> s;
 
-  int answ = 0;
+  long long int answ = 0;
   std::string suff;
 
   for (int n = s.size(), i = n - 1; i >= 0; --i) {
     suff = s[i] + suff;
 
     auto z = zfunc(suff);
-    int pref_sz = *std::max_element(z.begin(), z.end());
+    long long int pref_sz = *std::max_element(z.begin(), z.end());
 
     while (pref_sz < suff.size()) {
       ++pref_sz;
