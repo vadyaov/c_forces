@@ -28,19 +28,29 @@ int main() {
   std::string p; std::cin >> p;
   int         k; std::cin >> k;
 
-  std::string t_rev(t.rbegin(), t.rend());
-  std::string p_rev(p.rbegin(), p.rend());
-
   const int n = t.size();
   const int m = p.size();
 
   auto forw_z = zfunc(p + '#' + t);
-  auto revr_z = zfunc(p_rev + '#' + t_rev);
 
-  int a, b;
+  std::reverse(t.begin(), t.end());
+  std::reverse(p.begin(), p.end());
+
+  auto revr_z = zfunc(p + '#' + t);
+
+  std::vector<int> answ;
+
   for (int l = 0; l < n - m + 1; ++l) {
-    a = forw_z[m + l];
+    int a = forw_z[m + l + 1];
+    int b = revr_z[n - l + 1];
+
+    if (a + b >= m - k)
+      answ.push_back(l + 1);
   }
+
+  std::cout << answ.size() << "\n";
+  for (int answer : answ)
+    std::cout << answer << " ";
 
   return 0;
 }
